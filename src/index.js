@@ -1,4 +1,5 @@
-import { isLabelWithInternallyDisabledControl } from '@testing-library/user-event/dist/utils';
+import './wdyr';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
