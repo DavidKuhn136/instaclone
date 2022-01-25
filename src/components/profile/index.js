@@ -1,17 +1,22 @@
 import { useReducer, useEffect } from "react";
 import PropTypes from "prop-types";
 import Header from "./header";
-import { getUserPhotosByUsername } from "../../services/firebase";
+import { getUserPhotosByUserId } from "../../services/firebase";
+import Photos from "./photos";
 
 export default function UserProfile({ user }) {
-  // use reducer
+  // use reducer instead of useState
+  // if useState, store primitive types...if objects and arrays, use useReducer.  if you are using Redux, can get even more complicated
+
+  // take current state and spread it over new state
   const reducer = (state, newState) => ({ ...state, ...newState });
   const initialState = {
-    profile: {},
-    photosCollection: [],
+    profile: {}, // always object
+    photosCollection: [], // always array
     followerCount: 0,
   };
 
+  // get the values and use dispatch to set the values down below
   const [{ profile, photosCollection, followerCount }, dispatch] = useReducer(
     reducer,
     initialState
@@ -19,7 +24,7 @@ export default function UserProfile({ user }) {
 
   useEffect(() => {
     async function getProfileInfoAndPhotos() {
-      const photos = getUserPhotosByUsername(user.username);
+      const photos = await getUserPhotosByUserId(user.userId);
       dispatch({
         profile: user,
         photosCollection: photos,
@@ -31,20 +36,25 @@ export default function UserProfile({ user }) {
 
   return (
     <>
-      <Header />
-      <p>Hello, {user.username}</p>
+      <Header
+        photosCount={photosCollection ? photosCollection.length : 0}
+        profile={profile}
+        followerCount={followerCount}
+        setFollowerCount={dispatch}
+      />
+      <Photos photos={photosCollection} />
     </>
   );
 }
 
 UserProfile.propTypes = {
   user: PropTypes.shape({
-    dateCreated: PropTypes.number.isRequired,
-    emailAddress: PropTypes.string.isRequired,
-    followers: PropTypes.array.isRequired,
-    following: PropTypes.array.isRequired,
-    fullName: PropTypes.string.isRequired,
-    userId: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-  }).isRequired,
+    dateCreated: PropTypes.number,
+    emailAddress: PropTypes.string,
+    followers: PropTypes.array,
+    following: PropTypes.array,
+    fullName: PropTypes.string,
+    userId: PropTypes.string,
+    username: PropTypes.string,
+  }),
 };

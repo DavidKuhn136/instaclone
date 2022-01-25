@@ -12,6 +12,7 @@ export default function Comments({
 }) {
   const [comments, setComments] = useState(allComments);
 
+  // TODO: Add pagination on "View all comments" link
   return (
     <>
       <div className="p-4 pt-1 pb-4">
