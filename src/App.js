@@ -15,6 +15,7 @@ const NotFound = lazy(() => import("./pages/not-found"));
 const Profile = lazy(() => import("./pages/profile"));
 
 export default function App() {
+  // checks authentication to get the logged in user.
   const { user } = useAuthListener();
 
   return (
